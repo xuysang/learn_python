@@ -1,6 +1,7 @@
 from array import array
 import math
 class Vector2d:
+	__slots__=('__x','__y')
 	typecode = 'd'
 	def __init__(self,x,y):
 		self.__x = float(x) #使用两个前导下划线，把属性标记为私有的

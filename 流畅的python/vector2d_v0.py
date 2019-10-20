@@ -20,13 +20,20 @@ class Vector2d:
 		return math.hypot(self.x,self.y)  # 模是x和y分量构成的直角三角形的斜边长。
 	def __bool__(self):
 		return bool(abs(self))  # 计算亩，把结果换成布尔值，非零值是True.
-	@classmethod
-	def frombytes(cls,octets):
-		typecode = chr(octets[0])
-		memv = memoryview(octets[1:]).cast(typecode)
-		return cls(*memv)
-	def __format__(self,fmt_spec=''):
-		components = (format(c,fmt_spec) for c in self)
-		return '({},{})'.format(*components)
 	def angle(self):
 		return math.atan2(self.y,self.x)
+	def __format__(self,fmt_spec=''):
+		if fmt_spec.endswith('p'):  # 如果格式代码以'p'结尾，使用极坐标
+			fmt_spec = fmt_spec[:-1] # 从fmt_spec中删除'p'后缀
+			coords = (abs(self),self.angle()) # 构建一个元祖，表示极坐标：(magnitude,angle)
+			outer_fmt = '<{},{}>' # 把外层格式设为一对尖括号
+		else:
+			coords = self # 如果不以'p'结尾，使用self的x和y分量构建直角坐标
+			outer_fmt = '({},{})' # 把格式外层设为一对圆括号
+		components = (format(c,fmt_spec) for c in coords) #使用内置的format函数把fmt_spec应用到向量的各个分量上，构建一个可迭代的格式化字符串
+		return outer_fmt.format(*components) # 把格式化字符串代入外层格式中。
+	@classmethod # 类方法使用classmethod装饰器修饰
+	def frombytes(cls,octets): # 不传入self参数；相反，通过cls传人类本身
+ 		typecode = chr(octets[0]) #  从第一个字节中读取typecode
+		memv = memoryview(octets[1:]).cast(typecode) # 使用传入的octets字节序列创建一个memoryview,然后使用typecode转换
+		return cls(*memv) # 拆包转换后的memoryview，得到构造方法所需的一对参数。

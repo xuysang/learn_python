@@ -1,0 +1,191 @@
+
+第二章
+容器序列存放的是它们所包含的任意类型的对象的引用，而扁平序列里存放的是值而不是引用。扁平序列其实是一段连续的内存空间。
+容器序列：list、tuple和collections.deque
+扁平序列：str、bytes、bytearray、memoryview和array.array
+
+序列类型按照能否被修改来分类。
+可变序列：list、bytearray、array.array、collections.deque和memoryview
+不可变序列：tuple、str和bytes
+
+生成器表达式：
+虽然也可以用列表推导来初始化元组、数组或其他序列类型，但是生成器表达式是更好的选择。这是因为生成器表达式背后遵守了迭代器协议，可以逐个地产出元素，而不是先建立一个完整的列表，然后再把这个列表传递到某个构造函数里。前面那种方式显然能够节省内存。生成器表达式的语法跟列表推导差不多，只不过把方括号换成圆括号而已。
+
+array.array('I', (ord(symbol) for symbol in symbols))
+如果生成器表达式是一个函数调用过程中的唯一参数，那么不需要额外再用括号把它围起来。
+
+for循环可以分别提取元组里的元素，也叫作拆包（unpacking）。因为元组中第二个元素对我们没有什么用，所以它赋值给“_”占位符。
+
+元祖
+1.最好辨认的元组拆包形式就是平行赋值，也就是说把一个可迭代对象里的元素，一并赋值到由对应的变量组成的元组中。
+lax_coordinates = (33.9425,-118.408056) 
+latitude, longitude = lax_coordinates
+2.让一个函数可以用元组的形式返回多个值，然后调用函数的代码就能轻松地接受这些返回值。比如os.path.split（　）函数就会返回以路径和最后一个文件名组成的元组(path, last_part)
+>>> filename=os.path.split('/home/lucoano/.ssh/idrsa.pub')
+>>> filename
+('/home/lucoano/.ssh', 'idrsa.pub')
+
+
+3.函数用*args来获取不确定数量的参数
+>>>a, b, *rest = range(5)
+>>>a, b, rest 
+(0, 1, [2, 3, 4])
+在平行赋值中，*前缀只能用在一个变量名前面，但是这个变量可以出现在赋值表达式的任意位置：
+>>>a, *b, rest = range(5)
+>>>a, b, rest 
+(0, [1, 2, 3], 4)
+
+4.创建具名元祖需要两个参数，一个是类名，另一个是类的各个字段的名字。后者可以是由数个字符串组成的可迭代对象，或者是由空格分隔开的字段名组成的字符串。存放在对应字段里的数据要以一串参数的形式传入到构造函数中。可以通过字段名或者位置来获取一个字段的信息。
+>>> from collections import namedtuple
+>>> City = namedtuple('City','name country population coordinates')
+>>> tokyo = City('Tokyo','JP',36.933,(35.689722,139.691667))
+>>> tokyo
+City(name='Tokyo', country='JP', population=36.933, coordinates=(35.689722, 139.691667))
+>>> tokyo.population
+36.933
+>>> tokyo.coordinates
+(35.689722, 139.691667)
+>>> tokyo[1]
+'JP'
+具名元祖专有属性：_fields属性是包含这个类所有字段名称的元祖。_make()通过接受一个可迭代对象来生成类的一个实例。_asdict()把具名元祖以collections.OrderDict的形式返回。
+
+不要把可变对象放在元祖里
+
+第三章
+只有可散列的数据类型才能用作映射里的键。
+可散列类型：如果一个对象是可散列的，在这个对象的生命周期中，散列值是不变的，而且这个对象需要实现__hash__()方法。另外可散列对象还要有__eq__()方法，这样才能和其他键做比较。如果两个可散列对象是相等的，那么它们的散列值是一样的。
+原子不可变数据类型（str、bytes和数值类型）都是可散列类型，frozenset也是可散列的。元祖，只有当一个元祖包含的所有元素是可散列类型的情况下才是可散列的。
+1.字典的构造方法：
+>>> a = dict(one=1,two=2,three=3)
+>>> b = {'one':1,'two':2,'three':3}
+>>> c = dict(zip(['one','two','three'],[1,2,3]))
+>>> d = dict([('two',2),('one',1),('three',3)])
+>>> e = dict({'three':3,'one':1,'two':2})
+>>> a==b==c==d==e
+True
+
+2.字典推导
+字典推导可以从任何以键值对作为元素的可迭代对象中构建出字典。
+
+用setdefault处理找不到的键
+my_dict.setdefault(key,[]).append(new_value)
+等同于
+If key not in my_dict:
+    my_dict[key] = []
+my_dict[key].append(new_value)
+
+集合的本质是许多唯一对象的聚集。
+空集必须写成set()
+
+第五章
+函数
+def factorial(n):
+    '''return n!'''
+    return 1 if n<2 else n*factorial(n-1)
+
+>>> factorial.__doc__
+'return n!'
+__doc__是函数对象众多属性中的一个，factorial是function类的实例
+
+接受函数为参数，或者把函数作为结果返回的函数是高阶函数，例如(map,filter,reduce)
+使用不定量的参数调用函数，可以编写fn(*args,**keywords)
+
+可调用对象（7种）
+1.用户定义的函数（使用def语句或lambda表达式创建）
+2.内置函数（使用C语言（CPython）实现的函数，如len或time.strftime
+3.内置方法（使用C语言实现的方法，如dict.get）
+4.方法（在类的定义体中定义的函数）
+5.类（调用类时会运行类的__new__方法创建一个实例，然后运行__init__方法，初始化实例，最后把实例返回给调用方。因为python没有new运算符，所以调用类相当于调用函数）
+6.类的实例（如果类定义了__call__方法，那么它的实例可以作为函数调用）
+7.生成器函数（使用yield关键字的函数或方法，调用生成器函数返回的是生成器对象）
+
+判断对象能否调用，最安全的方法是使用内置的callable()函数。
+>>> [callable(obj) for obj in (abs,str,13)]
+[True, True, False]
+
+相等但不是
+== 表明值是否相等（对象中保存的数据）
+is 比较对象的标识（对象在内存中的地址）
+在变量和单利值直接比较时，应该使用is  (x is None/x is not None)
+is运算符比==速度快
+浅复制，list与turple一开始引用是相同的，后面列表改变是就地改变，元祖改变是创建了新的元祖
+深复制，副本不共享内部对象的引用
+copy模块提供的deepcopy和copy函数能为任意对象做深复制和浅复制
+
+不要使用可变类型作为参数的默认值
+
+垃圾回收
+del命令可能会导致对象被当做垃圾回收。但是仅当删除的变量保存的是对象的最后一个引用，或者无法得到对象时。
+
+弱引用
+WeakValueDictionary类实现的是一种可变映射，里面的值是对象的弱引用。被引用的对象在程序中的其他地方被当做垃圾回收后，对应的键会自动从WeakValueDictionary中删除。因此WeakValueDictionary经常用于缓存。
+with open('test.txt','wt',encoding='utf-8') as fp:
+    fp.write('1,2,3')
+
+对象表示形式
+repr()：以便于开发者理解的方式返回对象的字符串表示形式
+str()：以便于用户理解的方式返回对象的字符串表示形式
+
+@classmethod
+def frombytes(cls,octets):
+  typecode = chr(octets[0])
+  memv = memoryview(octets[1:]).cast(typecode)
+  return cls(*memv)
+
+@classmethod
+定义操作类，而不是操作实例的方法。classmethod改变调用方法的方式，第一个参数是类本身，不是实例。classmethod最常见的用途是定义备选构造方法。按照约定，类方法的第一个参数名为cls
+
+格式化显示
+内置的format（ ）函数和str.format（ ）方法把各个类型的格式化方式委托给相应的.__format__(format_spec)方法。format_spec是格式说明符，它是：format(my_obj, format_spec)的第二个参数，或者str.format（ ）方法的格式字符串，{}里代换字段中冒号后面的部分
+>>> brl=1/2.43
+>>> brl
+0.4115226337448559
+>>> format(brl,'0.4f')
+'0.4115'
+>>> '1 BRL={rate:0.2f} USD'.format(rate=brl)
+'1 BRL=0.41 USD'
+
+format函数
+格式规范微语言，b和x表示二进制和十六进制的int类型，f表示小数形式的float类型，%表示百分数形式。
+>>> format(42,'b')
+'101010'
+>>> format(2/3,'.1%')
+'66.7%'
+
+
+使用两个前导下划线（尾部没有下划线，或者有一个下划线），把属性标记为私有的
+注意，我们让这些向量不可变是有原因的，因为这样才能实现__hash__方法。这个方法应该返回一个整数，理想情况下还要考虑对象属性的散列值（__eq__方法也要使用），因为相等的对象应该具有相同的散列值。根据特殊方法__hash__的文档，最好使用位运算符异或（^）混合各分量的散列值
+
+
+有人编写了一个名为Dog的类，这个类的内部用到了mood实例属性，但是没有将其开放。现在，你创建了Dog类的子类：Beagle。如果你在毫不知情的情况下又创建了名为mood的实例属性，那么在继承的方法中就会把Dog类的mood属性覆盖掉。这是个难以调试的问题。为了避免这种情况，如果以__mood的形式（两个前导下划线，尾部没有或最多有一个下划线）命名实例属性，Python会把属性名存入实例的__dict__属性中，而且会在前面加上一个下划线和类名。因此，对Dog类来说，__mood会变成_Dog__mood；对Beagle类来说，会变成_Beagle__mood。这个语言特性叫名称改写（name mangling）
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
