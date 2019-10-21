@@ -32,6 +32,30 @@ class Vector:
 		else:
 			msg = '{cls.__name__} indices must be integers'
 			raise TypeError(msg.format(cls=cls))
+	shortcut_names='xyzt'
+	def __getattr__(self,name):
+		cls = type(self) # 获取Vector
+		if len(name)==1: # 如果属性名只有一个字母，可能是shortcut_names中的一个
+			pos = cls.shortcut_names.find(name) # 查找那个字母的位置
+			if 0<=pos<len(self._components):
+				return self._components[pos]
+		msg = '{.__name__!r} object has no attribute {!r}'
+		raise AttributeError(msg.format(cls,name))
+	def __setattr__(self,name,value):
+		cls = type(self)
+	    if len(name)==1: # 特别处理名称是单个字符的属性
+	    	if name in cls.shortcut_names: # 如果name是xyzt中的一个，设置特殊的错误消息
+	    		error = 'readonly attribute {attr_name!r}'
+	    	elif name.islower(): # 如果name是小写字母，为所有小写字母设置一个错误消息
+	    		error="can't set attribute 'a' to 'z' in {cls_name!r}"
+	    	else:
+	    		error='' # 否则，把错误消息设为空字符串
+	    	if error: # 如果有错误消息，抛出AttributeError
+	    		msg = error.format(cls_name=cls.__name__,attr_name=name)
+	    		raise AttributeError(msg)
+	    super().__setattr__(name,value) # 默认情况：在超类上调用__setattr__方法，提供标准行为
+
+
 
 	@classmethod
 	def frombytes(cls,octets):
