@@ -1,0 +1,3 @@
+查看数据库：SHOW DATABASES;
+选择数据看：USE **;
+查看表：SHOW TABLES;

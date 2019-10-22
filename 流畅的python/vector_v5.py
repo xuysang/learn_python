@@ -1,8 +1,10 @@
 from array import array
+import numbers
 import math
 import reprlib
 import functools #为了使用reduce函数导入该模块
 import operator #为了使用xor函数导入该模块
+import itertools
 class Vector:
 	typecode = 'd'
 	def __init__(self,components):
@@ -32,10 +34,10 @@ class Vector:
 		cls = type(self)
 		if isinstance(index,slice):
 			return cls(self._components[index])
-		elif isinstance(index,int):
+		elif isinstance(index,numbers.Integral):
 			return self._components[index]
 		else:
-			msg = '{cls.__name__} indices must be integers'
+			msg = '{.__name__} indices must be integers'
 			raise TypeError(msg.format(cls=cls))
 	shortcut_names='xyzt'
 	def __getattr__(self,name):
@@ -46,24 +48,27 @@ class Vector:
 				return self._components[pos]
 		msg = '{.__name__!r} object has no attribute {!r}'
 		raise AttributeError(msg.format(cls,name))
-	def __setattr__(self,name,value):
-		cls = type(self)
-	    if len(name)==1: # 特别处理名称是单个字符的属性
-	    	if name in cls.shortcut_names: # 如果name是xyzt中的一个，设置特殊的错误消息
-	    		error = 'readonly attribute {attr_name!r}'
-	    	elif name.islower(): # 如果name是小写字母，为所有小写字母设置一个错误消息
-	    		error="can't set attribute 'a' to 'z' in {cls_name!r}"
-	    	else:
-	    		error='' # 否则，把错误消息设为空字符串
-	    	if error: # 如果有错误消息，抛出AttributeError
-	    		msg = error.format(cls_name=cls.__name__,attr_name=name)
-	    		raise AttributeError(msg)
-	    super().__setattr__(name,value) # 默认情况：在超类上调用__setattr__方法，提供标准行为
-
-
-
+	def angle(self,n): # 使用n维球体词条中的公式计算某个角坐标
+		r = math.sqrt(sum(x * x for x in self[n:]))
+		a = math.atan2(r,self[n-1])
+		if (n==len(self)-1) and (self[-1]<0):
+			return math.pi*2-a
+		else:
+			return a
+	def angles(self):  # 创建生成器表达式，按需计算所有角坐标
+		return (self.angle(n) for n in range(1,len(self)))
+	def __format__(self,fmt_spec=''): 
+		if fmt_spec.endswith('h'): #超球面坐标
+			fmt_spec = fmt_spec[:-1]
+			coords = itertools.chain([abs(self)],self.angles()) # 使用itertools.chain函数生成生成器表达式，无缝迭代向量的模和各个角坐标
+			outer_fmt = '<{}>' # 配置使用尖括号显示球面坐标
+		else:
+			coords = self
+			outer_fmt = '({})' # 配置使用圆括号显示笛卡尔坐标
+		components = (format(c,fmt_spec) for c in coords) # 创建生成器表达式，按需格式化各个坐标元素
+		return outer_fmt.format(', '.join(components)) # 把以逗号分隔的格式化分量插入尖括号或圆括号
 	@classmethod
 	def frombytes(cls,octets):
 		typecode = chr(octets[0])
 		memv = memoryview(octets[1:]).cast(typecode)
-		return cls(memv) #
+		return cls(memv) 
