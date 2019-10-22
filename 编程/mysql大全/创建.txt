@@ -1,0 +1,13 @@
+创建表
+CREATE TABLE jjjzb (ID int NOT NULL AUTO_INCREMENT,GPDM VARCHAR(10),DWJZ DECIMAL(19,8),LJJZ DECIMAL(19,8),JJZCJZ DECIMAL(10,8),XXLY VARCHAR(20),JZRQ DATETIME,PRIMARY KEY (`ID`));
+
+插入记录：
+INSERT INTO () VALUES();
+
+删除表
+DROP TABLE **;
+
+
+python里：
+sql = "INSERT INTO jjjzb(GPDM,DWJZ,LJJZ,JJZCJZ,XXLY,JZRQ) VALUES ('%s' ,%s,%s,%s,'鹏华基金','2019-6-28')" % (str(code), results[0], results[1], results[2])
+%s有没有带引号，对数据影响很大，带了引号入库的是字符串，没有带就不是。

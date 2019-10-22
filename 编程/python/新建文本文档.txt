@@ -1,0 +1,31 @@
+容器序列存放的是它们所包含的任意类型的对象的引用，而扁平序列里存放的是值而不是引用。扁平序列其实是一段连续的内存空间。
+容器序列：list、tuple和collections.deque
+扁平序列：str、bytes、bytearray、memoryview和array.array
+
+序列类型按照能否被修改来分类。
+可变序列：list、bytearray、array.array、collections.deque和memoryview
+不可变序列：tuple、str和bytes
+
+生成器表达式：
+虽然也可以用列表推导来初始化元组、数组或其他序列类型，但是生成器表达式是更好的选择。这是因为生成器表达式背后遵守了迭代器协议，可以逐个地产出元素，而不是先建立一个完整的列表，然后再把这个列表传递到某个构造函数里。前面那种方式显然能够节省内存。生成器表达式的语法跟列表推导差不多，只不过把方括号换成圆括号而已。
+
+array.array('I', (ord(symbol) for symbol in symbols))
+如果生成器表达式是一个函数调用过程中的唯一参数，那么不需要额外再用括号把它围起来。
+
+
+for循环可以分别提取元组里的元素，也叫作拆包（unpacking）。因为元组中第二个元素对我们没有什么用，所以它赋值给“_”占位符。
+
+1.最好辨认的元组拆包形式就是平行赋值，也就是说把一个可迭代对象里的元素，一并赋值到由对应的变量组成的元组中。
+lax_coordinates = (33.9425,-118.408056) 
+latitude, longitude = lax_coordinates
+2.让一个函数可以用元组的形式返回多个值，然后调用函数的代码就能轻松地接受这些返回值。比如os.path.split（　）函数就会返回以路径和最后一个文件名组成的元组(path, last_part)
+>>> filename=os.path.split('/home/lucoano/.ssh/idrsa.pub')
+>>> filename
+('/home/lucoano/.ssh', 'idrsa.pub')
+
+
+3.函数用*args来获取不确定数量的参数
+>>>a, b, *rest = range(5)
+>>>a, b, rest 
+(0, 1, [2, 3, 4])
+在平行赋值中，*前缀只能用在一个变量名前面，但是这个变量可以出现在赋值表达式的任意位置：

@@ -1,0 +1,44 @@
+把excel里面一个sheet的内容，复制到另一个sheet里面
+Sub a()
+Dim a
+With Application.FileDialog(msoFileDialogFilePicker)
+.AllowMultiSelect = False
+.InitialFileName = ThisWorkbook.Path
+If .Show = -1 Then
+Set a = Workbooks.Open(.SelectedItems(1))
+a.Sheets("封闭式基金").AutoFilterMode = False
+a.Sheets("封闭式基金").Range("A1:D14").Copy ThisWorkbook.Sheets("源数据-单位净值").Range("A1")
+a.Close False
+End If
+End With
+End Sub
+
+
+
+选中有内容的数据
+Sub s()
+Dim a
+Dim b
+With Application.FileDialog(msoFileDialogFilePicker)
+.AllowMultiSelect = False
+.InitialFileName = ThisWorkbook.Path
+If .Show = -1 Then
+Set a = Workbooks.Open(.SelectedItems(1))
+a.Sheets("开放式及ETF基金").AutoFilterMode = False
+'ThisWorkbook.Sheets("源数据-单位净值").[E1].Value = a.Sheets("开放式及ETF基金").Cells(Rows.Count, 1).End(xlUp).Row
+b = a.Sheets("开放式及ETF基金").Cells(Rows.Count, 1).End(xlUp).Row
+a.Sheets("开放式及ETF基金").Range("A2", "D" & b).Copy ThisWorkbook.Sheets("源数据-单位净值").Range("A1")
+a.Sheets("开放式及ETF基金").Range("G2", "G" & b).Copy ThisWorkbook.Sheets("源数据-单位净值").Range("E1")
+'[E1].Value = a.Sheets("开放式及ETF基金").Cells(Rows.Count, 1).End(xlUp).Row
+a.Close False
+End If
+End With
+End Sub
+
+
+
+
+
+NextRow = ActiveSheet.Cells(Rows.Count, 1).End(xlUp).Row + 1
+    这句话的意思是 取活动单元表的第一列最后一个有值的行的下一行行号。
+ActiveSheet为当前活动表格
