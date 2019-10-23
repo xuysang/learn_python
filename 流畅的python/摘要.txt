@@ -170,9 +170,9 @@ super£¨¡¡£©º¯ÊýÓÃÓÚ¶¯Ì¬·ÃÎÊ³¬ÀàµÄ·½·¨£¬¶ÔPythonÕâÑùÖ§³Ö¶àÖØ¼Ì³ÐµÄ¶¯Ì¬ÓïÑÔÀ´Ëµ£¬±
 Ê¹ÓÃreduceº¯ÊýÊ±×îºÃÌá¹©µÚÈý¸ö²ÎÊý£¬reduce(function, iterable, initializer)£¬ÕâÑùÄÜ±ÜÃâÕâ¸öÒì³££ºTypeError: reduce£¨¡¡£© of empty sequence with no initial value£¨Õâ¸ö´íÎóÏûÏ¢ºÜ°ô£¬ËµÃ÷ÁËÎÊÌâ£¬»¹Ìá¹©ÁË½â¾ö·½·¨£©¡£Èç¹ûÐòÁÐÎª¿Õ£¬initializerÊÇ·µ»ØµÄ½á¹û£»·ñÔò£¬ÔÚ¹éÔ¼ÖÐÊ¹ÓÃËü×÷ÎªµÚÒ»¸ö²ÎÊý£¬Òò´ËÓ¦¸ÃÊ¹ÓÃºãµÈÖµ¡£±ÈÈç£¬¶Ô+¡¢|ºÍ^À´Ëµ£¬ initializerÓ¦¸ÃÊÇ0£»¶ø¶Ô*ºÍ&À´Ëµ£¬Ó¦¸ÃÊÇ1¡£
 
 
+µÚÊ®Ò»ÕÂ  ½Ó¿Ú£º´ÓÐ­Òéµ½³éÏó»ùÀà
 
-
-
+Ê×ÏÈ£¬±¾ÕÂËµÃ÷³éÏó»ùÀàµÄ³£¼ûÓÃÍ¾£ºÊµÏÖ½Ó¿ÚÊ±×÷Îª³¬ÀàÊ¹ÓÃ¡£È»ºó£¬ËµÃ÷³éÏó»ùÀàÈçºÎ¼ì²é¾ßÌå×ÓÀàÊÇ·ñ·ûºÏ½Ó¿Ú¶¨Òå£¬ÒÔ¼°ÈçºÎÊ¹ÓÃ×¢²á»úÖÆÉùÃ÷Ò»¸öÀàÊµÏÖÁËÄ³¸ö½Ó¿Ú£¬¶ø²»½øÐÐ×ÓÀà»¯²Ù×÷¡£×îºó£¬ËµÃ÷ÈçºÎÈÃ³éÏó»ùÀà×Ô¶¯¡°Ê¶±ð¡±ÈÎºÎ·ûºÏ½Ó¿ÚµÄÀà¡ª¡ª²»½øÐÐ×ÓÀà»¯»ò×¢²á¡£
 
 
 
