@@ -1,6 +1,7 @@
 创建项目 scrapy startproject tutorial(项目名字)
 
-在项目的spiders文件下，创建程序文件，取名字A。在A里面定义一个类B，继承scrapy.Spider。在这个类B里面，定义三个属性。
+在项目的spiders文件下，创建程序文件，scrapy genspider mydomain(取名) mydomain.com(爬取的地址)
+取名字A。在A里面定义一个类B，继承scrapy.Spider。在这个类B里面，定义三个属性。
 1.name，取名C，用于区别不同的spider
 2.start_urls：首先启动时爬取的url，可以是列表
 3.parse(),一个方法，初始url完成下载后生成的response对象将作为参数传递给这个函数，这个方法用来解析返回的数据，提取数据（生成item）以及生成需要进一步处理的url的request对象。
