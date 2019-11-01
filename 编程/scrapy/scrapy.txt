@@ -8,3 +8,12 @@
 
 进入项目的根目录，就是在spiders文件夹这个目录里，执行命令启动spider
 scrapy crawl C
+
+如果传入参数
+scrapy crawl zjh_gg -a category=2019-11-1
+
+
+scrapy导出爬取数据到本地的命令
+以json格式进行导出: scrapy crawl 爬虫名称 -o  file_name.json`
+以xml格式进行导出: scrapy crawl 爬虫名称 -o  file_name.xml`
+以csv格式进行导出: scrapy crawl 爬虫名称 -o  file_name.csv`
