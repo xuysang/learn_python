@@ -26,3 +26,143 @@
 标准的迭代器接口有两个方法。
 __next__：返回下一个可用的元素，如果没有元素了，抛出StopIteration异常。
 __iter__：返回self，以便在应该使用可迭代对象的地方使用迭代器，例如在for循环中。
+
+生成器表达式可以理解为列表推导的惰性版本：不会迫切地构建列表，而是返回一个生成器，按需惰性生成元素。也就是说，如果列表推导是制造列表的工厂，那么生成器表达式就是制造生成器的工厂。
+
+标准库提供了很多生成器，有用于逐行迭代纯文本文件的对象，还有出色的os.walk函数。这个函数在遍历目录树的过程中产出文件名，因此递归搜索文件系统像for循环那样简单
+
+通用的函数：参数为任意的可迭代对象，返回值是生成器，用于生成选中的、计算出的和重新排列的元素。
+
+1.用于过滤的生成器函数
+>>> def vowel(c):
+... 	return c.lower() in 'aeiou'
+>>> import itertools
+>>> list(itertools.filterfalse(vowel,'Aardvark'))
+['r', 'd', 'v', 'r', 'k']
+>>> list(itertools.dropwhile(vowel,'Aardvark'))
+['r', 'd', 'v', 'a', 'r', 'k']
+>>> list(itertools.takewhile(vowel,'Aardvark'))
+['A', 'a']
+>>> list(itertools.compress('Aardvark',(1,0,1,1,0,1))
+... )
+['A', 'r', 'd', 'a']
+>>> list(itertools.islice('Aardvark',4))
+['A', 'a', 'r', 'd']
+>>> list(itertools.islice('Aardvark',4,7))
+['v', 'a', 'r']
+>>> list(itertools.islice('Aardvark',1,7,2))
+['a', 'd', 'a']
+
+2.用于映射的生成器函数
+>>> sample = [5,4,2,8,7,6,3,0,9,1]
+>>> import itertools
+>>> list(itertools.accumulate(sample))
+[5, 9, 11, 19, 26, 32, 35, 35, 44, 45]
+>>> list(itertools.accumulate(sample,min))
+[5, 4, 2, 2, 2, 2, 2, 0, 0, 0]
+>>> list(itertools.accumulate(sample,max))
+[5, 5, 5, 8, 8, 8, 8, 8, 9, 9]
+>>> import operator
+>>> list(itertools.accumulate(sample,operator.mul))
+[5, 20, 40, 320, 2240, 13440, 40320, 0, 0, 0]
+>>> list(itertools.accumulate(range(1,11),operator.mul))
+[1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800]
+>>> list(enumerate('albatroz',1))
+[(1, 'a'), (2, 'l'), (3, 'b'), (4, 'a'), (5, 't'), (6, 'r'), (7, 'o'), (8, 'z')]
+>>> list(map(operator.mul,range(11),range(11)))
+[0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+>>> list(map(operator.mul,range(11),[2,4,8]))
+[0, 4, 16]
+>>> list(map(lambda a,b:(a,b),range(11),[2,4,8]))
+[(0, 2), (1, 4), (2, 8)]
+>>> list(itertools.starmap(operator.mul,enumerate('albatroz',1)))
+['a', 'll', 'bbb', 'aaaa', 'ttttt', 'rrrrrr', 'ooooooo', 'zzzzzzzz']
+>>> list(itertools.starmap(lambda a,b:b/a,enumerate(itertools.accumulate(sample),1)))
+[5.0, 4.5, 3.6666666666666665, 4.75, 5.2, 5.333333333333333, 5.0, 4.375, 4.888888888888889, 4.5]
+
+3.合并多个可迭代对象的生成器函数
+>>> list(itertools.chain('ABC',range(2)))
+['A', 'B', 'C', 0, 1]
+>>> list(itertools.chain(enumerate('ABC')))
+[(0, 'A'), (1, 'B'), (2, 'C')]
+>>> list(itertools.chain.from_iterable(enumerate('ABC')))
+[0, 'A', 1, 'B', 2, 'C']
+>>> list(zip('ABC',range(5)))
+[('A', 0), ('B', 1), ('C', 2)]
+>>> list(zip('ABC',range(5),[10,20,30,40]))
+[('A', 0, 10), ('B', 1, 20), ('C', 2, 30)]
+>>> list(itertools.zip_longest('ABC',range(5)))
+[('A', 0), ('B', 1), ('C', 2), (None, 3), (None, 4)]
+>>> list(itertools.zip_longest('ABC',range(5),fillvalue='?'))
+[('A', 0), ('B', 1), ('C', 2), ('?', 3), ('?', 4)]
+
+4.把输入的各个元素扩展成多个输出元素的生成器函数
+>>> ct = itertools.count()
+>>> next(ct)
+0
+>>> next(ct),next(ct),next(ct)
+(1, 2, 3)
+>>> list(itertools.islice(itertools.count(1,.3),3))
+[1, 1.3, 1.6]
+>>> cy = itertools.cycle('ABC')
+>>> next(cy)
+'A'
+>>> next(cy)
+'B'
+>>> next(cy)
+'C'
+>>> list(itertools.islice(cy,7))
+['A', 'B', 'C', 'A', 'B', 'C', 'A']
+>>> rp=itertools.repeat(7)
+>>> next(rp)
+7
+>>> rp=itertools.repeat(8,4)
+>>> list(rp)
+[8, 8, 8, 8]
+>>> list(map(operator.mul,range(11),itertools.repeat(5)))
+[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
+>>> list(itertools.combinations('ABC',2))
+[('A', 'B'), ('A', 'C'), ('B', 'C')]
+>>> list(itertools.combinations_with_replacement('ABC',2))
+[('A', 'A'), ('A', 'B'), ('A', 'C'), ('B', 'B'), ('B', 'C'), ('C', 'C')]
+>>> list(itertools.permutations('ABC',2))
+[('A', 'B'), ('A', 'C'), ('B', 'A'), ('B', 'C'), ('C', 'A'), ('C', 'B')]
+>>> list(itertools.product('ABC',repeat=2))
+[('A', 'A'), ('A', 'B'), ('A', 'C'), ('B', 'A'), ('B', 'B'), ('B', 'C'), ('C', 'A'), ('C', 'B'), ('C', 'C')]
+
+5.用于重新排列元素的生成器函数
+>>> list(itertools.groupby('LLLLAAGGG'))
+[('L', <itertools._grouper object at 0x0000000002867320>), ('A', <itertools._grouper object at 0x00000000028673C8>), ('G', <itertools._grouper object at 0x00000000028672E8>)]
+>>> for char,group in itertools.groupby('LLLLAAGGG'):
+... 	print(char,'->',list(group))
+... 
+L -> ['L', 'L', 'L', 'L']
+A -> ['A', 'A']
+G -> ['G', 'G', 'G']
+>>> animals = ['duck','eagle','rat','giraffe','bear','bat','dolphin','shark','lion']
+>>> animals.sort(key=len)
+>>> animals
+['rat', 'bat', 'duck', 'bear', 'lion', 'eagle', 'shark', 'giraffe', 'dolphin']
+>>> for length,group in itertools.groupby(animals,len):
+... 	print(length,'->',list(group))
+... 
+3 -> ['rat', 'bat']
+4 -> ['duck', 'bear', 'lion']
+5 -> ['eagle', 'shark']
+7 -> ['giraffe', 'dolphin']
+>>> list(itertools.tee('ABC'))
+[<itertools._tee object at 0x0000000002863F48>, <itertools._tee object at 0x0000000002863F88>]
+>>> g1,g2 = itertools.tee('ABC')
+>>> next(g1)
+'A'
+>>> next(g2)
+'A'
+>>> next(g2)
+'B'
+>>> list(g1)
+['B', 'C']
+>>> list(g2)
+['C']
+>>> list(zip(*itertools.tee('ABC')))
+[('A', 'A'), ('B', 'B'), ('C', 'C')]
+
