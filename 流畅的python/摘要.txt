@@ -200,3 +200,16 @@ super£¨¡¡£©º¯ÊýÓÃÓÚ¶¯Ì¬·ÃÎÊ³¬ÀàµÄ·½·¨£¬¶ÔPythonÕâÑùÖ§³Ö¶àÖØ¼Ì³ÐµÄ¶¯Ì¬ÓïÑÔÀ´Ëµ£¬±
 Ê¹ÓÃ³éÏó»ùÀàÊ±£¬¶àÖØ¼Ì³ÐºÜ³£¼û£¬¶øÇÒÊµ¼ÊÉÏÒ²ÊÇ²»¿É±ÜÃâµÄ£¬ÒòÎª×î»ù±¾µÄ¼¯ºÏ³éÏó»ùÀà£¨Sequence¡¢MappingºÍSet£©¶¼À©Õ¹¶à¸ö³éÏó»ùÀà¡£
 
 µÚÊ®ÈýÕÂ  ÕýÈ·ÖØÔØÔËËã·û
+
+µÚÊ®ÎåÕÂ  ÉÏÏÂÎÄ¹ÜÀíÆ÷ºÍelse¿é
+
+for/else¡¢while/else¡¢try/else
+else×Ó¾äµÄÐÐÎªÈçÏÂ:
+1.½öµ±forÑ­»·ÔËÐÐÍê±ÏÊ±£¨¼´forÑ­»·Ã»ÓÐ±»breakÓï¾äÖÐÖ¹£©²ÅÔËÐÐelse¿é¡£
+2.½öµ±whileÑ­»·ÒòÎªÌõ¼þÎª¼ÙÖµ¶øÍË³öÊ±£¨¼´whileÑ­»·Ã»ÓÐ±»breakÓï¾äÖÐÖ¹£©²ÅÔËÐÐelse¿é¡£
+3.½öµ±try¿éÖÐÃ»ÓÐÒì³£Å×³öÊ±²ÅÔËÐÐelse¿é¡£¹Ù·½ÎÄµµ»¹Ö¸³ö£º¡°else×Ó¾äÅ×³öµÄÒì³£²»»áÓÉÇ°ÃæµÄexcept×Ó¾ä´¦Àí¡£¡±
+ÔÚËùÓÐÇé¿öÏÂ£¬Èç¹ûÒì³£»òÕßreturn¡¢break»òcontinueÓï¾äµ¼ÖÂ¿ØÖÆÈ¨Ìøµ½ÁË¸´ºÏÓï¾äµÄÖ÷¿éÖ®Íâ£¬else×Ó¾äÒ²»á±»Ìø¹ý¡£
+EAFP:
+È¡µÃÔ­ÁÂ±È»ñµÃÐí¿ÉÈÝÒ×£¨easier to ask for forgiveness than permission£©¡£ÕâÊÇÒ»ÖÖ³£¼ûµÄPython±à³Ì·ç¸ñ£¬ÏÈ¼Ù¶¨´æÔÚÓÐÐ§µÄ¼ü»òÊôÐÔ£¬Èç¹û¼Ù¶¨²»³ÉÁ¢£¬ÄÇÃ´²¶»ñÒì³£¡£ÕâÖÖ·ç¸ñ¼òµ¥Ã÷¿ì£¬ÌØµãÊÇ´úÂëÖÐÓÐºÜ¶àtryºÍexceptÓï¾ä¡£ÓëÆäËûºÜ¶àÓïÑÔÒ»Ñù£¨ÈçCÓïÑÔ£©£¬ÕâÖÖ·ç¸ñµÄ¶ÔÁ¢ÃæÊÇLBYL·ç¸ñ¡£
+LBYL:
+ÈýË¼¶øºóÐÐ£¨look before you leap£©¡£ÕâÖÖ±à³Ì·ç¸ñÔÚµ÷ÓÃº¯Êý»ò²éÕÒÊôÐÔ»ò¼üÖ®Ç°ÏÔÊ½²âÊÔÇ°ÌáÌõ¼þ¡£ÓëEAFP·ç¸ñÏà·´£¬ÕâÖÖ·ç¸ñµÄÌØµãÊÇ´úÂëÖÐÓÐºÜ¶àifÓï¾ä¡£ÔÚ¶àÏß³Ì»·¾³ÖÐ£¬LBYL·ç¸ñ¿ÉÄÜ»áÔÚ¡°¼ì²é¡±ºÍ¡°ÐÐÊÂ¡±µÄ¿Õµ±ÒýÈëÌõ¼þ¾ºÕù¡£ÀýÈç£¬¶Ôif key in mapping: return mapping[key]Õâ¶Î´úÂëÀ´Ëµ£¬Èç¹ûÔÚ²âÊÔÖ®ºó£¬µ«ÔÚ²éÕÒÖ®Ç°£¬ÁíÒ»¸öÏß³Ì´ÓÓ³ÉäÖÐÉ¾³ýÁËÄÇ¸ö¼ü£¬ÄÇÃ´Õâ¶Î´úÂë¾Í»áÊ§°Ü¡£Õâ¸öÎÊÌâ¿ÉÒÔÊ¹ÓÃËø»òÕßEAFP·ç¸ñ½â¾ö¡£

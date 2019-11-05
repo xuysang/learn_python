@@ -10,7 +10,7 @@
 scrapy crawl C
 
 如果传入参数
-scrapy crawl zjh_gg -a category=2019-11-1
+scrapy crawl zjh_gg -a category=2019-11-4
 
 
 scrapy导出爬取数据到本地的命令
