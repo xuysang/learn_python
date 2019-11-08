@@ -1,0 +1,156 @@
+对 Linux 新手非常有用的 20 个命令 - 慕课网的文章 - 知乎
+https://zhuanlan.zhihu.com/p/30383450
+1.ls命令
+ls命令是列出目录内容(List Directory Contents)的意思。
+"ls -l"命令以详情模式(long listing fashion)列出文件夹的内容。
+"ls -a"命令会列出文件夹里的所有内容，包括以"."开头的隐藏文件。
+
+
+root@tecmint:~# ls -l
+
+total 40588
+drwxrwxr-x 2 ravisaive ravisaive     4096 May  8 01:06 Android Games
+drwxr-xr-x 2 ravisaive ravisaive     4096 May 15 10:50 Desktop
+drwxr-xr-x 2 ravisaive ravisaive     4096 May 16 16:45 Documents
+
+1.d (代表了是目录)
+2.rwxr-xr-x 是文件或者目录对所属用户，同一组用户和其它用户的权限。
+3.上面例子中第一个ravisaive 代表了文件文件属于用户ravisaive
+4.上面例子中的第二个ravisaive代表了文件文件属于用户组ravisaive
+5.4096 代表了文件大小为4096字节
+6.May 8 01:06 代表了文件最后一次修改的日期和时间
+7.最后面的就是文件/文件夹的名字
+
+
+2.lsblk命令
+"lsblk"就是列出块设备。除了RAM外，以标准的树状输出格式，整齐地显示块设备。
+“lsblk -l”命令以列表格式显示块设备(而不是树状格式)。
+
+3.md5sum命令(待了解)
+“md5sum”就是计算和检验MD5信息签名。md5 checksum(通常叫做哈希)使用匹配或者验证文件的文件的完整性，因为文件可能因为传输错误，磁盘错误或者无恶意的干扰等原因而发生改变。
+
+4.dd命令
+“dd”命令代表了转换和复制文件。可以用来转换和复制文件，大多数时间是用来复制iso文件(或任何其它文件)到一个usb设备(或任何其它地方)中去，所以可以用来制作USB启动器。
+
+5.uname命令
+"uname"命令就是Unix Name的简写。显示机器名，操作系统和内核的详细信息。
+root@tecmint:~# uname -a
+Linux tecmint 3.8.0-19-generic #30-Ubuntu SMP Wed May 1 16:36:13 UTC 2013 i686 i686 i686
+
+注意： uname显示内核类别， uname -a显示详细信息。上面的输出详细说明了uname -a
+“Linux“: 机器的内核名
+“tecmint“: 机器的节点名
+“3.8.0-19-generic“: 内核发布版本
+“#30-Ubuntu SMP“: 内核版本
+“i686“: 处理器架构
+“GNU/Linux“: 操作系统名
+
+6.history命令
+“history”命令就是历史记录。它显示了在终端中所执行过的所有命令的历史。
+注意：按住“CTRL + R”就可以搜索已经执行过的命令，它可以在你写命令时自动补全。
+
+7.sudo命令
+“sudo”(super user do)命令允许授权用户执行超级用户或者其它用户的命令。通过在sudoers列表的安全策略来指定。
+
+8.mkdir命令
+“mkdir”(Make directory)命令在命名路径下创建新的目录。然而如果目录已经存在了，那么它就会返回一个错误信息"不能创建文件夹，文件夹已经存在了"("cannot create folder, folder already exists")
+
+9.touch 命令
+“touch”命令代表了将文件的访问和修改时间更新为当前时间。touch命令只会在文件不存在的时候才会创建它。如果文件已经存在了，它会更新时间戳，但是并不会改变文件的内容。
+注意：touch 可以用来在用户拥有写权限的目录下创建不存在的文件。
+
+10.chmod 命令
+“chmod”命令就是改变文件的模式位。chmod会根据要求的模式来改变每个所给的文件，文件夹，脚本等等的文件模式（权限）。
+在文件(文件夹或者其它，为了简单起见，我们就使用文件)中存在3中类型的权限
+Read (r)=4
+Write(w)=2
+Execute(x)=1
+所以如果你想给文件只读权限，就设置为'4';只写权限，设置权限为'2';只执行权限，设置为1; 读写权限，就是4+2 = 6, 以此类推。
+现在需要设置3种用户和用户组权限。第一个是拥有者，然后是用户所在的组，最后是其它用户。
+rwxr-x--x   abc.sh
+这里root的权限是 rwx（读写和执行权限），
+所属用户组权限是 r-x (只有读和执行权限, 没有写权限)，
+对于其它用户权限是 -x(只有只执行权限)
+为了改变它的权限，为拥有者，用户所在组和其它用户提供读，写，执行权限。
+root@tecmint:~# chmod 777 abc.sh
+三种都只有读写权限:
+root@tecmint:~# chmod 666 abc.sh
+拥有者用户有读写和执行权限，用户所在的组和其它用户只有可执行权限:
+root@tecmint:~# chmod 711 abc.sh
+
+
+11.chown命令
+“chown”命令就是改变文件拥有者和所在用户组。每个文件都属于一个用户组和一个用户。在你的目录下，使用"ls -l",你就会看到像这样的东西。
+root@tecmint:~# ls -l
+drwxr-xr-x 3 server root 4096 May 10 11:14 Binary
+drwxr-xr-x 2 server server 4096 May 13 09:42 Desktop
+在这里，目录Binary属于用户"server",和用户组"root",而目录"Desktop"属于用户“server”和用户组"server"
+“chown”命令用来改变文件的所有权，所以仅仅用来管理和提供文件的用户和用户组授权。
+root@tecmint:~# chown server:server Binary
+drwxr-xr-x 3 server server 4096 May 10 11:14 Binary
+drwxr-xr-x 2 server server 4096 May 13 09:42 Desktop
+注意：“chown”所给的文件改变用户和组的所有权到新的拥有者或者已经存在的用户或者用户组。
+
+12.apt命令
+Debian系列以“apt”命令为基础，“apt”代表了Advanced Package Tool。APT是一个为Debian系列系统（Ubuntu，Kubuntu等等）开发的高级包管理器，在Gnu/Linux系统上，它会为包自动地，智能地搜索，安装，升级以及解决依赖。
+root@tecmint:~# apt-get install mplayer
+
+注意：上面的命令会导致系统整体的改变，所以需要root密码（查看提示符为"#"，而不是“$”）.和yum命令相比，Apt更高级和智能。见名知义，apt-cache用来搜索包中是否包含子包mplayer, apt-get用来安装，升级所有的已安装的包到最新版。
+
+13.tar命令  https://www.tecmint.com/18-tar-command-examples-in-linux/
+“tar”命令是磁带归档(Tape Archive)，对创建一些文件的的归档和它们的解压很有用。
+root@tecmint:~# tar -zxvf abc.tar.gz (记住'z'代表了.tar.gz)
+root@tecmint:~# tar -jxvf abc.tar.bz2 (记住'j'代表了.tar.bz2)
+root@tecmint:~# tar -cvf archieve.tar.gz(.bz2) /path/to/folder/abc
+
+注意： "tar.gz"代表了使用gzip归档，“bar.bz2”使用bzip压缩的，它压缩的更好但是也更慢。
+
+
+14.cal 命令
+“cal”（Calender），它用来显示当前月份或者未来或者过去任何年份中的月份。
+root@tecmint:~# cal
+
+显示已经过去的月份，1835年2月
+root@tecmint:~# cal 02 1835
+
+显示未来的月份，2145年7月。
+root@tecmint:~# cal 07 2145
+
+15.date命令
+“date”命令使用标准的输出打印当前的日期和时间，也可以深入设置。
+root@tecmint:~# date
+
+root@tecmint:~# date --set='14 may 2013 13:57'
+注意：这个命令在脚本中十分有用，以及基于时间和日期的脚本更完美。而且在终端中改变日期和时间
+
+16.cat命令  https://www.tecmint.com/13-basic-cat-command-examples-in-linux/
+“cat”代表了连结（Concatenation），连接两个或者更多文本文件或者以标准输出形式打印文件的内容。
+Wildcard Matches
+   *            零个或者更多字符
+   ?            恰好一个字符
+[abcde]             恰好列举中的一个字符
+ [a-e]          恰好在所给范围中的一个字符
+[!abcde]        任何字符都不在列举中
+[!a-e]          任何字符都不在所给的范围中
+{debian,linux}      恰好在所给选项中的一整个单词
+
+17.cp 命令
+“copy”就是复制。它会从一个地方复制一个文件到另外一个地方。
+root@tecmint:~# cp /home/user/Downloads abc.tar.gz /home/user/Desktop (Return 0 when sucess)
+注意： cp，在shell脚本中是最常用的一个命令，而且它可以使用通配符（在前面一块中有所描述），来定制所需的文件的复制。
+
+18.mv 命令
+“mv”命令将一个地方的文件移动到另外一个地方去。
+root@tecmint:~# mv /home/user/Downloads abc.tar.gz /home/user/Desktop (Return 0 when sucess)
+注意：mv 命令可以使用通配符。mv需谨慎使用，因为移动系统的或者未授权的文件不但会导致安全性问题，而且可能系统崩溃。
+
+19.pwd 命令
+“pwd”（print working directory），在终端中显示当前工作目录的全路径。
+注意： 这个命令并不会在脚本中经常使用，但是对于新手，当从连接到nux很久后在终端中迷失了路径，这绝对是救命稻草。
+
+20.cd 命令
+
+
+
+
+http://www.imooc.com/article/1453
