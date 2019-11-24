@@ -7,7 +7,8 @@ class Solution:
 			if num != nums[i]:
 				i += 1
 				nums[i] = num
+		print(nums)
 		return len(nums) and i+1
 a=Solution()
-nums = [1,1,2]
+nums = [1,1,2,2,2,3,3]
 print(a.removeDuplicates(nums))
