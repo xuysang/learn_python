@@ -17,7 +17,6 @@ class Solution1:
 			node.next = l1
 		if l2:
 			node.next = l2
-		print(res.next.next.val)
 		return res.next
 
 class Solution2:
@@ -28,4 +27,11 @@ class Solution2:
 		l1.next = self.mergeTwoLists(l1.next,l2)
 		return l1
 
-		
+s1 = Solution1()
+l1 = ListNode(1)
+l1.next = ListNode(2)
+l1.next.next = ListNode(4)
+l2 = ListNode(1)
+l2.next = ListNode(3)
+l2.next.next = ListNode(4)
+s1.mergeTwoLists(l1,l2)
