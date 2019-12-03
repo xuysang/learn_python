@@ -15,3 +15,10 @@ Mobile2 = convert(concrete2,task)
 atall2 = False
 content_txt2 = '陈富贵提醒您：该处理晨星评级啦'
 dingTalk(content_txt2,Mobile2,atall2)
+
+'''
+Mobile3 = ["15088645474","15269049997",]
+atall3 = False
+content_txt3 = '陈富贵提醒您：到点修改最低限额啦'
+dingTalk(content_txt3,Mobile3,atall3)
+'''

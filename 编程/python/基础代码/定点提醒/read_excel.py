@@ -28,14 +28,14 @@ def convert(concrete,task):
 		
 	return list_final
 if __name__=='__main__':
-	file = '定点业务安排（11-25~11-29）.xlsx'
-	task = read_excel(file)
+	# file = '定点业务安排（11-25~11-29）.xlsx'
+	# task = read_excel(file)
 	localtime = time.strftime("%H:%M", time.localtime())
 
-	concrete1 = '三四级库表专项语句'
-	Mobile = convert(concrete1,task)
+	#concrete1 = '三四级库表专项语句'
+	Mobile =["13654131410",]
 	atall = False
-	content_txt = '小助手提醒您该点三四级库表专项语句啦'
+	content_txt = '提醒：对不起，您发的表情我无法识别'
 	dingTalk(content_txt,Mobile,atall)
 
 '''
@@ -47,5 +47,13 @@ if __name__=='__main__':
 		dingTalk(content_txt,Mobile,atall)
 
 '''
+'''
+content_txt = '呸呸'
+Mobile = ["13654131410",]
+atall = False
+dingTalk(content_txt,Mobile,atall)
 
+#dingTalk('呸呸',["13654131410"],False)
+
+'''
 
