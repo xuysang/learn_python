@@ -1,0 +1,16 @@
+python在不同层级目录import模块的方法
+有一个文件夹/home/a,  里面有个模块叫b.py,  我怎么把他import到程序里？
+三种方法：
+1.
+import sys;
+sys.path.append("/home/a/")
+import b
+2.
+在目录里面增加__init__.py文件，里面可以写import时执行的代码，当然也可以留空就可以.
+import home.a.b
+3.
+from home.a.b import *
+前提 home、a中都包括__init__.py
+
+pyinstaller用法：
+在pyinstaller脚本目录下，pyinstaller.exe -F path:demo.py

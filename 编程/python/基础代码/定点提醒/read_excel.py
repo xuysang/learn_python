@@ -1,7 +1,7 @@
 import xlrd
 import time
 from dingtest import dingTalk
-def read_excel(file= '//10.3.2.15//数据二部共享//基金组//定点业务安排//2019年//定点业务安排（12-2~12-6）.xlsx'):
+def read_excel(file= '//10.3.2.15//数据二部共享//基金组//定点业务安排//2019年//定点业务安排（12-10~12-14）.xlsx'):
 	wb = xlrd.open_workbook(file)
 	# sheet1 = wb.sheet_by_index(0)
 	sheet1 = wb.sheet_by_name('Sheet1')
@@ -10,7 +10,7 @@ def read_excel(file= '//10.3.2.15//数据二部共享//基金组//定点业务�
 	cols_name2 = sheet1.col_values(4)
 	i = 1
 	task = {}
-	for each in cols_task[1:35]:
+	for each in cols_task[1:36]:
 		list_0 = [cols_name1[i],cols_name2[i]]
 		task[each] = list_0
 		i+=1
@@ -28,6 +28,10 @@ def convert(concrete,task):
 		
 	return list_final
 if __name__=='__main__':
+	task = read_excel()
+
+
+'''	
 	# file = '定点业务安排（11-25~11-29）.xlsx'
 	# task = read_excel(file)
 	localtime = time.strftime("%H:%M", time.localtime())
@@ -35,10 +39,10 @@ if __name__=='__main__':
 	#concrete1 = '三四级库表专项语句'
 	Mobile =["13654131410",]
 	atall = False
-	content_txt = '提醒：对不起，您发的表情我无法识别'
+	content_txt = '提醒：大家好，我要下班了'
 	dingTalk(content_txt,Mobile,atall)
 
-'''
+
 	if localtime == '7:00' or localtime == '8:30' or localtime == '10:30' or localtime == '13:30' or localtime == '15:30':
 		concrete1 = '过电子公告'
 		Mobile = convert(concrete1,task)
