@@ -1,7 +1,7 @@
 def isvalid(str):
 	count = 0
 	for c in str:
-		if c == 'c':
+		if c == '(':
 			count += 1
 		elif c == ')':
 			count -= 1
@@ -25,5 +25,5 @@ def bfs(str):
 		queue = list(set(temp))
 	return list(set(res))
 
-a = '(a) (b) ) ()'
+a = '(define (rainbow p)'
 print(bfs(a))
