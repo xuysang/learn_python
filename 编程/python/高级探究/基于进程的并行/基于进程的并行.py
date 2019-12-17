@@ -10,6 +10,6 @@ def f(pagenum):
 	return json.loads(login_page.text)
 if __name__=='__main__':
 	with Pool(5) as p:
-		print(p.map(f,[x for x in range(1,4)]))
+		print(p.map(f,[x for x in range(1,3)]))
 
 
