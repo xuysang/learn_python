@@ -2,11 +2,9 @@ from bs4 import BeautifulSoup
 import requests
 import time
 import xlsxwriter
-import concurrent.futures
+from concurrent import futures
 
 start = time.time()
-
-
 def get_res(k):
     url = 'http://cn.morningstar.com/quickrank/default.aspx'
     headers = {
@@ -28,29 +26,29 @@ def get_res(k):
 
     data1 = {
         '__EVENTTARGET': 'ctl00$cphMain$AspNetPager1',
-        '__EVENTARGUMENT': '%s' % k,
+        '__EVENTARGUMENT': '%s' %k,
         '__VIEWSTATE': viewstate,
         '__VIEWSTATEGENERATOR': '302D9840',
         '__EVENTVALIDATION': eventvalidation
     }
-    print(k)
     resp1 = requests.post(url, headers=headers, data=data1)
-    return resp1
-
-
+    return (resp1,k)
 def thread_way():
     workers = 10
-    res_list = []
-    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
-        future_to_url = {executor.submit(get_res, x): x for x in range(1, 6)}
-        res_list = list(concurrent.futures.as_completed(future_to_url))
-        res_list.sort(key=lambda k: k[1])
-        res = [x[0] for x in res_list]
-    return res
-
+    with futures.ThreadPoolExecutor(workers) as executor:
+        to_do = []
+        for i in range(1,373):
+            print("正在抓取第%s页" % i)
+            future = executor.submit(get_res, i)
+            to_do.append(future)
+    results = []
+    for future in futures.as_completed(to_do):
+        res = future.result()
+        results.append(res)
+    return results
 
 def write_execl(res):
-    workbook = xlsxwriter.Workbook('业绩表现test_thread11.xlsx')
+    workbook = xlsxwriter.Workbook('业绩表现test_thread.xlsx')
     worksheet = workbook.add_worksheet()
     worksheet.write(0, 0, '序号')
     worksheet.write(0, 1, '代码')
@@ -84,11 +82,12 @@ def write_execl(res):
                 worksheet.write(row, col, y.text.strip())
             row += 1
     workbook.close()
-
-
-if __name__ == '__main__':
+if __name__=='__main__':
     # freeze_support()
-    res0 = thread_way()
-    write_execl(res0)
+    res0=thread_way()
+    res0.sort(key=lambda k: k[1])
+    res = [x[0] for x in res0]
+
+    write_execl(res)
     end = time.time()
-    print('总时间为：', end - start)
+    print("时间为", end - start)

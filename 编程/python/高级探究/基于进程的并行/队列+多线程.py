@@ -1,13 +1,30 @@
-from bs4 import BeautifulSoup
+import threading
 import requests
 import time
+import queue as Queue
+from bs4 import BeautifulSoup
 import xlsxwriter
-import concurrent.futures
 
 start = time.time()
 
 
-def get_res(k):
+class myThread(threading.Thread):
+    def __init__(self, name, q):
+        threading.Thread.__init__(self)
+        self.name = name
+        self.q = q
+
+    def run(self):
+    	while not self.q.empty():
+        # print("Starting" + self.name)
+        	page = self.q.get()
+        	res = get_res(page)
+        	print(page)
+        	# print("Exiting" + self.name)
+        	return (res,page)
+
+
+def get_res(q):
     url = 'http://cn.morningstar.com/quickrank/default.aspx'
     headers = {
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36'}
@@ -28,29 +45,22 @@ def get_res(k):
 
     data1 = {
         '__EVENTTARGET': 'ctl00$cphMain$AspNetPager1',
-        '__EVENTARGUMENT': '%s' % k,
+        '__EVENTARGUMENT': '%s' % q,
         '__VIEWSTATE': viewstate,
         '__VIEWSTATEGENERATOR': '302D9840',
         '__EVENTVALIDATION': eventvalidation
     }
-    print(k)
-    resp1 = requests.post(url, headers=headers, data=data1)
+    while True:
+        try:
+            resp1 = requests.post(url, headers=headers, data=data1)
+            break
+        except ConnectionError:
+            pass
     return resp1
 
 
-def thread_way():
-    workers = 10
-    res_list = []
-    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
-        future_to_url = {executor.submit(get_res, x): x for x in range(1, 6)}
-        res_list = list(concurrent.futures.as_completed(future_to_url))
-        res_list.sort(key=lambda k: k[1])
-        res = [x[0] for x in res_list]
-    return res
-
-
 def write_execl(res):
-    workbook = xlsxwriter.Workbook('业绩表现test_thread11.xlsx')
+    workbook = xlsxwriter.Workbook('业绩表现test_thread.xlsx')
     worksheet = workbook.add_worksheet()
     worksheet.write(0, 0, '序号')
     worksheet.write(0, 1, '代码')
@@ -86,9 +96,24 @@ def write_execl(res):
     workbook.close()
 
 
-if __name__ == '__main__':
-    # freeze_support()
-    res0 = thread_way()
-    write_execl(res0)
-    end = time.time()
-    print('总时间为：', end - start)
+threadList = ["Thread-1", "Thread-2", "Thread-3", "Thread-4", "Thread-5"]
+workQueue = Queue.Queue()
+threads = []
+for tName in threadList:
+    thread = myThread(tName, workQueue)
+    thread.start()
+    threads.append(thread)
+
+for x in range(1, 373):
+    workQueue.put(x)
+
+res_list = []
+for t in threads:
+    res_list.append(t.run())
+    t.join()
+res_list.sort(key=lambda k: k[1])
+res = [x[0] for x in res_list]
+
+write_execl(res)
+end = time.time()
+print("时间为", end - start)
