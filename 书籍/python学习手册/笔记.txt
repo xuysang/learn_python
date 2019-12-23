@@ -1,0 +1,4 @@
+模块是一个包含了Python语句的简单文本文件
+
+使用shell命令行来启动Python程序，所有常用的shell语法都适用。例如，我们可以使用特定的shell语法，把一个Python脚本的输出定向到一个文件中，从而保存起来以备以后使用或查看：
+python script1.py > saveit.txt  (流重定向（stream redirection），它用于文本的输入和输出，而且在Windows和类似UNIX的系统上都可以使用。)
