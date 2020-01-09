@@ -1,7 +1,7 @@
 import xlrd
 import time
 from dingtest import dingTalk
-def read_excel(file= '//10.3.2.15//数据二部共享//基金组//定点业务安排//2019年//定点业务安排.xlsx'):
+def read_excel(file= '//10.3.2.15//数据二部共享//基金组//定点业务安排//2020年//定点业务安排.xlsx'):
 	wb = xlrd.open_workbook(file)
 	# sheet1 = wb.sheet_by_index(0)
 	sheet1 = wb.sheet_by_name('Sheet1')
